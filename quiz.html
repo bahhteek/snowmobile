@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подбор снегохода — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="quiz">
+  <div class="grain"></div>
+  <div id="site-header"></div>
+  <section class="page-hero photo">
+    <div class="hero-media"><img src="images/touring.jpg" alt=""></div>
+    <div class="container" style="position:relative;z-index:1;padding-bottom:36px;">
+      <div class="crumbs"><a href="index.html">Главная</a><span>/</span><span>Подбор</span></div>
+      <p class="eyebrow">Квиз</p>
+      <h1>Какой снегоход вам нужен</h1>
+      <p class="hero-lead">Три шага: где ездите, кто едет, бюджет. На выходе 2–3 модели и заявка менеджеру.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:12px;">
+    <div class="container">
+      <div class="quiz">
+        <div class="quiz-copy">
+          <p class="eyebrow">Как это работает</p>
+          <h2>Не каталог, а задача</h2>
+          <p>Горы, трасса, лес или хозяйство задают тип машины. Дальше смотрим пассажиров, багаж и бюджет.</p>
+        </div>
+        <div class="quiz-widget">
+          <div class="quiz-progress" id="quizProgress"><i class="on"></i><i></i><i></i></div>
+          <div id="quizStep">
+            <h3 id="quizTitle"></h3>
+            <div class="options" id="quizOptions"></div>
+            <div class="quiz-nav">
+              <button class="btn btn-ghost" id="quizBack" type="button">Назад</button>
+              <button class="btn btn-primary" id="quizNext" type="button">Далее</button>
+            </div>
+          </div>
+          <div class="quiz-result" id="quizResult"></div>
+        </div>
+      </div>
+      <div class="catalog-grid" id="catalog" style="margin-top:28px;"></div>
+    </div>
+  </section>
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест-драйв — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="grain"></div>
+  <div id="site-header"></div>
+  <section class="page-hero photo">
+    <div class="hero-media"><img src="images/hero.jpg" alt=""></div>
+    <div class="container" style="position:relative;z-index:1;padding-bottom:36px;">
+      <div class="crumbs"><a href="index.html">Главная</a><span>/</span><span>Тест-драйв</span></div>
+      <p class="eyebrow">Покататься до покупки</p>
+      <h1>Запись на тест-драйв</h1>
+      <p class="hero-lead">Слот подтверждаем по телефону. Шлем выдаём, маршрут — рядом с салоном.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:12px;">
+    <div class="container" style="max-width:640px;">
+      <form class="form panel" id="tdForm">
+        <input name="name" placeholder="Имя" required>
+        <input name="phone" type="tel" placeholder="Телефон" required>
+        <select name="model" required>
+          <option value="">Модель</option>
+          <option>Ski-Doo Summit</option>
+          <option>Ski-Doo MXZ</option>
+          <option>Lynx Commander RE</option>
+          <option>RM Vector 551i</option>
+          <option>RM Буран Лидер</option>
+        </select>
+        <input name="date" type="date">
+        <button class="btn btn-primary" type="submit">Забронировать слот</button>
+      </form>
+    </div>
+  </section>
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    document.getElementById("tdForm").addEventListener("submit", function (e) {
+      e.preventDefault(); this.reset(); nordline.toast("Слот запросили. Перезвоним подтвердить.");
+    });
+  </script>
+</body>
+</html>

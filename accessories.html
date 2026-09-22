@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Аксессуары — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="service">
+  <div class="grain"></div>
+  <div id="site-header"></div>
+  <section class="page-hero photo">
+    <div class="hero-media"><img src="images/trail.jpg" alt=""></div>
+    <div class="container" style="position:relative;z-index:1;padding-bottom:36px;">
+      <div class="crumbs"><a href="index.html">Главная</a><span>/</span><span>Аксессуары</span></div>
+      <p class="eyebrow">Обвес и экипировка</p>
+      <h1>Кофры, сани, шлемы</h1>
+      <p class="hero-lead">Подбираем обвес к конкретной комплектации. Заявка — не корзина.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:12px;">
+    <div class="container catalog-grid" id="acc"></div>
+  </section>
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    document.getElementById("acc").innerHTML = NORDLINE_DATA.accessories.map(function (item) {
+      return '<article class="card"><div class="card-media"><img src="' + item.image + '" alt=""></div><div class="card-body"><h3>' + item.name + '</h3><div class="price" style="text-align:left;">' + item.price + '</div><button class="btn btn-primary js-lead" type="button" data-model="' + item.name + '">Запросить</button></div></article>';
+    }).join("");
+  </script>
+</body>
+</html>

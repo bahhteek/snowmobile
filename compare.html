@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сравнение — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="compare">
+  <div class="grain"></div>
+  <div id="site-header"></div>
+  <section class="page-hero">
+    <div class="container">
+      <div class="crumbs"><a href="index.html">Главная</a><span>/</span><span>Сравнение</span></div>
+      <p class="eyebrow">До трёх моделей</p>
+      <h1>Сравнить технику</h1>
+      <p class="hero-lead">Мотор, гусеница, посадка, цена и наличие рядом. Онлайн-оплаты нет — из таблицы сразу заявка.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:10px;">
+    <div class="container">
+      <div class="filters" id="pick"></div>
+      <div class="table-wrap" id="tableWrap"></div>
+    </div>
+  </section>
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    (function () {
+      var api = window.nordline;
+      var selected = api.compareList();
+      if (!selected.length) {
+        selected = ["summit", "commander", "buran"];
+        localStorage.setItem("nordline-compare", JSON.stringify(selected));
+      }
+
+      function renderPick() {
+        document.getElementById("pick").innerHTML = api.getModels().map(function (model) {
+          var on = selected.indexOf(model.id) >= 0;
+          return '<button class="chip' + (on ? " active" : "") + '" data-id="' + model.id + '">' + model.name + "</button>";
+        }).join("");
+      }
+
+      function row(label, fn) {
+        var cells = selected.map(function (id) {
+          var model = api.getModel(id);
+          return "<td>" + (model ? fn(model) : "—") + "</td>";
+        }).join("");
+        return "<tr><td>" + label + "</td>" + cells + "</tr>";
+      }
+
+      function renderTable() {
+        var heads = selected.map(function (id) {
+          var model = api.getModel(id);
+          return "<th>" + (model ? model.brand + " " + model.name : "") + "</th>";
+        }).join("");
+        document.getElementById("tableWrap").innerHTML =
+          '<table class="compare-table"><thead><tr><th>Параметр</th>' + heads + "</tr></thead><tbody>" +
+          row("Тип езды", function (m) { return m.typeLabel; }) +
+          row("Цена", function (m) { return m.priceLabel; }) +
+          row("Наличие", function (m) { return m.stockLabel; }) +
+          row("Двигатель", function (m) { return m.engine; }) +
+          row("Мощность", function (m) { return m.hp; }) +
+          row("Гусеница", function (m) { return m.track; }) +
+          row("Посадка", function (m) { return m.seats; }) +
+          row("Сценарий", function (m) { return m.use; }) +
+          "</tbody></table>" +
+          '<p style="margin-top:18px;"><button class="btn btn-primary js-lead" type="button">Запросить сравнение у менеджера</button></p>';
+      }
+
+      document.getElementById("pick").addEventListener("click", function (event) {
+        var chip = event.target.closest(".chip");
+        if (!chip) return;
+        selected = api.toggleCompare(chip.getAttribute("data-id"));
+        if (!selected.length) selected = [chip.getAttribute("data-id")];
+        renderPick();
+        renderTable();
+      });
+
+      renderPick();
+      renderTable();
+    })();
+  </script>
+</body>
+</html>

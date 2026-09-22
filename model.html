@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Модель — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="catalog">
+  <div class="grain"></div>
+  <div id="site-header"></div>
+  <section class="section" id="modelPage" style="padding-top: 36px;"></section>
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    (function () {
+      var api = window.nordline;
+      var model = api.getModel(api.qs("id") || "summit") || api.getModels()[0];
+      document.title = model.brand + " " + model.name + " — NORDLINE";
+      var thumbs = model.gallery.map(function (src, index) {
+        return '<button type="button" class="' + (index === 0 ? "active" : "") + '" data-src="' + src + '"><img src="' + src + '" alt=""></button>';
+      }).join("");
+      var configs = model.configs.map(function (item) { return "<li>" + item + "</li>"; }).join("");
+
+      document.getElementById("modelPage").innerHTML =
+        '<div class="container">' +
+        '<div class="crumbs"><a href="index.html">Главная</a><span>/</span><a href="catalog.html">Каталог</a><span>/</span><span>' + model.name + "</span></div>" +
+        '<div class="product">' +
+        '<div><div class="gallery-main"><img id="mainPhoto" src="' + model.image + '" alt="' + model.name + '"></div>' +
+        '<div class="thumbs" id="thumbs">' + thumbs + "</div></div>" +
+        '<div class="buy-box">' +
+        '<div class="brand">' + model.brand + " · " + model.year + "</div>" +
+        "<h1>" + model.name + "</h1>" +
+        '<p class="muted">' + model.typeLabel + " · " + model.use + "</p>" +
+        '<div class="price" style="text-align:left;margin:16px 0;">' + model.priceLabel + "<small>" + model.stockLabel + "</small></div>" +
+        '<dl class="specs">' +
+        "<div><dt>Двигатель</dt><dd>" + model.engine + "</dd></div>" +
+        "<div><dt>Мощность</dt><dd>" + model.hp + "</dd></div>" +
+        "<div><dt>Гусеница</dt><dd>" + model.track + "</dd></div>" +
+        "<div><dt>Посадка</dt><dd>" + model.seats + "</dd></div></dl>" +
+        '<div class="card-actions" style="margin-top:18px;">' +
+        '<button class="btn btn-primary js-lead" type="button" data-model="' + model.brand + " " + model.name + '">Запросить цену</button>' +
+        '<button class="btn btn-ghost" id="addCompare" type="button">В сравнение</button>' +
+        "</div>" +
+        '<p class="note" style="margin-top:12px;">Онлайн-оплаты нет. Заявка уходит менеджеру: наличие, комплектация, счёт.</p>' +
+        "</div></div>" +
+        '<div class="tabs">' +
+        '<button class="chip active" data-tab="about">Описание</button>' +
+        '<button class="chip" data-tab="spec">Характеристики</button>' +
+        '<button class="chip" data-tab="cfg">Комплектации</button>' +
+        "</div>" +
+        '<div class="tab-panel show panel" id="about"><p class="prose">' + model.desc + "</p>" +
+        '<p class="muted" style="margin-top:12px;">Гарантия 12 месяцев. Предпродажная подготовка и постановка на сервис — в этом же салоне.</p></div>' +
+        '<div class="tab-panel panel" id="spec"><table class="compare-table"><tbody>' +
+        "<tr><td>Бренд</td><td>" + model.brand + "</td></tr>" +
+        "<tr><td>Тип езды</td><td>" + model.typeLabel + "</td></tr>" +
+        "<tr><td>Двигатель</td><td>" + model.engine + "</td></tr>" +
+        "<tr><td>Мощность</td><td>" + model.hp + "</td></tr>" +
+        "<tr><td>Гусеница</td><td>" + model.track + "</td></tr>" +
+        "<tr><td>Груз / сценарий</td><td>" + model.payload + "</td></tr>" +
+        "<tr><td>Посадка</td><td>" + model.seats + "</td></tr>" +
+        "</tbody></table></div>" +
+        '<div class="tab-panel panel" id="cfg"><ul class="prose">' + configs + "</ul>" +
+        '<a class="btn btn-ghost" href="compare.html" style="margin-top:16px;">Сравнить комплектации</a></div>' +
+        "</div>";
+
+      document.getElementById("thumbs").addEventListener("click", function (event) {
+        var btn = event.target.closest("button");
+        if (!btn) return;
+        document.getElementById("mainPhoto").src = btn.getAttribute("data-src");
+        this.querySelectorAll("button").forEach(function (el) { el.classList.toggle("active", el === btn); });
+      });
+
+      document.querySelectorAll("[data-tab]").forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          document.querySelectorAll("[data-tab]").forEach(function (el) { el.classList.remove("active"); });
+          chip.classList.add("active");
+          document.querySelectorAll(".tab-panel").forEach(function (panel) { panel.classList.remove("show"); });
+          document.getElementById(chip.getAttribute("data-tab")).classList.add("show");
+        });
+      });
+
+      document.getElementById("addCompare").addEventListener("click", function () {
+        api.toggleCompare(model.id);
+        api.toast("Добавили в сравнение");
+      });
+    })();
+  </script>
+</body>
+</html>

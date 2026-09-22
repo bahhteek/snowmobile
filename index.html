@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NORDLINE — снегоходы под задачу</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="home">
+  <div class="grain"></div>
+  <div id="site-header"></div>
+
+  <section class="hero">
+    <div class="hero-media">
+      <img src="images/hero.jpg" alt="Зимний склон">
+    </div>
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <p class="eyebrow">Ski-Doo · Lynx · Русская механика</p>
+        <h1>Снегоход<br>под вашу задачу</h1>
+        <p class="hero-lead">Горные, туристические, утилитарные и кроссоверные модели. Сравним комплектации, покажем наличие и соберём машину под охоту, рыбалку, трассу или работу.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="quiz.html">Подобрать снегоход</a>
+          <a class="btn btn-ghost" href="catalog.html">Смотреть модельный ряд</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>48</b><span>моделей и комплектаций</span></div>
+          <div><b>3</b><span>бренда в одном салоне</span></div>
+          <div><b>12</b><span>месяцев гарантии</span></div>
+          <div><b>0%</b><span>рассрочка на сезон</span></div>
+        </div>
+      </div>
+      <figure class="hero-sled">
+        <img src="images/hero-sled.png" alt="Снегоход Ski-Doo на снегу">
+        <figcaption>Ski-Doo · в наличии с ПСМ</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="types">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">01 / Тип езды</p>
+          <h2>Сначала сценарий,<br>потом модель</h2>
+        </div>
+        <p>Как у Ski-Doo и Polaris: каталог делится не по бренду, а по тому, где и зачем вы едете.</p>
+      </div>
+      <div class="ride-grid">
+        <a class="ride-card" href="catalog.html?type=mountain">
+          <img src="images/hero.jpg" alt="Горные снегоходы">
+          <div>
+            <small>Deep snow</small>
+            <h3>Горные</h3>
+            <p>Глубокий снег, склоны, лёгкая база и длинная гусеница.</p>
+          </div>
+        </a>
+        <a class="ride-card" href="catalog.html?type=trail">
+          <img src="images/mountain.jpg" alt="Трассовые снегоходы">
+          <div>
+            <small>Trail</small>
+            <h3>Трасса</h3>
+            <p>Скорость, управляемость и гоночная подвеска.</p>
+          </div>
+        </a>
+        <a class="ride-card" href="catalog.html?type=touring">
+          <img src="images/touring.jpg" alt="Туристические снегоходы">
+          <div>
+            <small>Touring</small>
+            <h3>Туризм</h3>
+            <p>Комфорт 1+1, обогрев, багаж и дальние маршруты.</p>
+          </div>
+        </a>
+        <a class="ride-card" href="catalog.html?type=utility">
+          <img src="images/utility.jpg" alt="Утилитарные снегоходы">
+          <div>
+            <small>Utility</small>
+            <h3>Утилитарные</h3>
+            <p>Хозяйство, охота, рыбалка, высокая грузоподъёмность.</p>
+          </div>
+        </a>
+        <a class="ride-card" href="catalog.html?type=crossover">
+          <img src="images/product.jpg" alt="Кроссоверные снегоходы">
+          <div>
+            <small>Crossover</small>
+            <h3>Кроссоверы</h3>
+            <p>Трасса утром, целина после обеда — одна машина.</p>
+          </div>
+        </a>
+      </div>
+      <div class="filters" style="margin-top: 16px;">
+        <a class="chip" href="brand.html?id=ski-doo">Ski-Doo</a>
+        <a class="chip" href="brand.html?id=lynx">Lynx</a>
+        <a class="chip" href="brand.html?id=rm">Русская механика</a>
+        <a class="chip" href="brand.html?id=irbis">Irbis</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="lineup" style="background: var(--bg-2);">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">02 / Модельный ряд</p>
+          <h2>Техника с ценой,<br>наличием и цифрами</h2>
+        </div>
+        <p>В карточках сразу: двигатель, гусеница, грузоподъёмность, цена и статус поставки.</p>
+      </div>
+
+      <div class="filters" id="filters">
+        <button class="chip active" data-filter="all">Все</button>
+        <button class="chip" data-filter="mountain">Горные</button>
+        <button class="chip" data-filter="trail">Трасса</button>
+        <button class="chip" data-filter="touring">Туризм</button>
+        <button class="chip" data-filter="utility">Утилитарные</button>
+        <button class="chip" data-filter="crossover">Кроссоверы</button>
+        <button class="chip" data-filter="light">Лёгкие</button>
+      </div>
+
+      <div class="catalog-grid" id="catalog"></div>
+      <p style="margin-top: 22px;"><a class="btn btn-ghost" href="catalog.html">Открыть весь каталог</a></p>
+    </div>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="container">
+      <div class="quiz">
+        <div class="quiz-copy">
+          <p class="eyebrow">03 / Подбор</p>
+          <h2>Какой снегоход вам нужен</h2>
+          <p>Три вопроса — и мы сузим линейку до 2–3 моделей. Дальше менеджер соберёт комплектацию, гусеницу и навесное. Есть и <a href="quiz.html" style="color:var(--accent)">отдельная страница подбора</a>.</p>
+          <ul class="steps">
+            <li><span class="num">1</span><div>Где ездите: горы, трасса, лес или хозяйство</div></li>
+            <li><span class="num">2</span><div>Один или 1+1, нужен ли багаж и сани</div></li>
+            <li><span class="num">3</span><div>Бюджет, наличие или поставка под заказ</div></li>
+          </ul>
+        </div>
+        <div class="quiz-widget">
+          <div class="quiz-progress" id="quizProgress"><i class="on"></i><i></i><i></i></div>
+          <div id="quizStep">
+            <h3 id="quizTitle">Где будете ездить?</h3>
+            <div class="options" id="quizOptions"></div>
+            <div class="quiz-nav">
+              <button class="btn btn-ghost" id="quizBack" type="button">Назад</button>
+              <button class="btn btn-primary" id="quizNext" type="button">Далее</button>
+            </div>
+          </div>
+          <div class="quiz-result" id="quizResult"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--bg-2);">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">04 / Почему NORDLINE</p>
+          <h2>Покупка без серой схемы</h2>
+        </div>
+        <p>Берём подачу BRP Центр Прайд: документы, гарантия, ритм поставок и сервис в одном месте.</p>
+      </div>
+      <div class="benefits">
+        <article class="benefit">
+          <b>01</b>
+          <h3>Официальный ввоз</h3>
+          <p>Техника с ПСМ, без серых схем. Можно регистрировать и обслуживать у дилера.</p>
+        </article>
+        <article class="benefit">
+          <b>02</b>
+          <h3>Еженедельные поставки</h3>
+          <p>Горные и утилитарные модели приходят каждую неделю. Статус «в пути» виден в карточке.</p>
+        </article>
+        <article class="benefit">
+          <b>03</b>
+          <h3>Гарантия 12 месяцев</h3>
+          <p>Свой сервис, оригинальные расходники и диагностика перед выдачей.</p>
+        </article>
+        <article class="benefit">
+          <b>04</b>
+          <h3>Рассрочка и трейд-ин</h3>
+          <p>Сезонная рассрочка 0% и зачёт текущего снегохода в счёт новой машины.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="service">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">05 / После покупки</p>
+          <h2>Сервис, запчасти<br>и обвес</h2>
+        </div>
+        <p>Как у Русской механики: владельцу нужны не только продажи, но и обслуживание, аксессуары и понятная информация.</p>
+      </div>
+      <div class="split">
+        <article class="split-card">
+          <img src="images/parts.jpg" alt="Запчасти и сервис">
+          <div class="inner">
+            <small class="eyebrow">Сервис</small>
+            <h3>Гарантия и ТО</h3>
+            <p>Предпродажная подготовка, сезонное ТО, хранение и ремонт ходовой. Запись на сервис — с главной.</p>
+            <a class="btn btn-primary" href="service.html">Записаться</a>
+          </div>
+        </article>
+        <article class="split-card">
+          <img src="images/touring.jpg" alt="Аксессуары">
+          <div class="inner">
+            <small class="eyebrow">Магазин</small>
+            <h3>Запчасти и обвес</h3>
+            <p>Гусеницы, кофры, коленки, подогрев, сани и экипировка. Подбор к конкретной комплектации.</p>
+            <a class="btn btn-ghost" href="parts.html">Подобрать обвес</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="compare" style="background: var(--bg-2);">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">06 / Сравнение</p>
+          <h2>Комплектации рядом</h2>
+        </div>
+        <p>Не «красивые карточки», а таблица: мотор, гусеница, подвеска, цена и наличие.</p>
+      </div>
+      <div class="table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th>Summit</th>
+            <th>Commander RE</th>
+            <th>Буран Лидер</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Тип езды</td><td>Горный</td><td>Кроссовер</td><td>Утилитарный</td></tr>
+          <tr><td>Двигатель</td><td>850 E-TEC Turbo R</td><td>900 ACE Turbo R</td><td>РМЗ 2T</td></tr>
+          <tr><td>Мощность</td><td>180 л.с.</td><td>180 л.с.</td><td>34 л.с.</td></tr>
+          <tr><td>Гусеница</td><td>165″ / 16″</td><td>44 мм PowderMax</td><td>2 × 380 мм</td></tr>
+          <tr><td>Цена от</td><td>2 450 000 ₽</td><td>2 649 000 ₽</td><td>520 000 ₽</td></tr>
+          <tr><td>Статус</td><td>В наличии</td><td>В наличии, ПСМ</td><td>В наличии</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="lead">
+    <div class="container">
+      <div class="lead">
+        <div>
+          <p class="eyebrow">07 / Заявка</p>
+          <h2>Соберём предложение за день</h2>
+          <p>Напишите задачу: охота, туризм, горы или хозяйство. Пришлём 2–3 модели, наличие, рассрочку и срок поставки.</p>
+        </div>
+        <form class="form" id="leadForm">
+          <input name="name" type="text" placeholder="Имя" required>
+          <input name="phone" type="tel" placeholder="Телефон" required>
+          <select name="task" required>
+            <option value="">Задача</option>
+            <option>Горы и глубокий снег</option>
+            <option>Трасса</option>
+            <option>Туризм 1+1</option>
+            <option>Охота / рыбалка</option>
+            <option>Хозяйство и работа</option>
+          </select>
+          <textarea name="comment" placeholder="Модель, бюджет или вопрос"></textarea>
+          <button class="btn btn-primary" type="submit">Отправить заявку</button>
+          <p class="note">Демо-форма для показа клиенту. В продакшене уйдёт в CRM / Telegram / почту.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

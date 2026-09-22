@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корпоративным клиентам — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="grain"></div>
+  <div id="site-header"></div>
+  <section class="page-hero">
+    <div class="container">
+      <div class="crumbs"><a href="index.html">Главная</a><span>/</span><span>Юрлицам</span></div>
+      <p class="eyebrow">Опт и службы</p>
+      <h1>Корпоративным клиентам</h1>
+      <p class="hero-lead">Договор, счёт, парк техники для экспедиций, охраны и сервисов. Работаем по ЭДО.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:8px;">
+    <div class="container" style="max-width:640px;">
+      <form class="form panel" id="corpForm">
+        <input name="company" placeholder="Компания" required>
+        <input name="inn" placeholder="ИНН">
+        <input name="name" placeholder="Контакт" required>
+        <input name="phone" type="tel" placeholder="Телефон" required>
+        <textarea name="comment" placeholder="Задача: парк, экспедиция, тендер"></textarea>
+        <button class="btn btn-primary" type="submit">Отправить запрос</button>
+      </form>
+    </div>
+  </section>
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    document.getElementById("corpForm").addEventListener("submit", function (e) {
+      e.preventDefault(); this.reset(); nordline.toast("Запрос для юрлица принят.");
+    });
+  </script>
+</body>
+</html>

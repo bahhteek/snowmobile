@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог снегоходов — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="catalog">
+  <div class="grain"></div>
+  <div id="site-header"></div>
+
+  <section class="page-hero photo">
+    <div class="hero-media"><img src="images/hero-sled.png" alt=""></div>
+    <div class="container" style="position:relative;z-index:1;padding-bottom:36px;">
+      <div class="crumbs"><a href="index.html">Главная</a><span>/</span><span>Каталог</span></div>
+      <p class="eyebrow">Модельный ряд</p>
+      <h1 id="catalogTitle">Все снегоходы</h1>
+      <p class="hero-lead" id="catalogLead">Фильтр по типу езды, бренду и наличию. Цены, комплектации и заявка менеджеру — без онлайн-оплаты.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:28px;">
+    <div class="container">
+      <div class="filters" id="typeFilters"></div>
+      <div class="filters" id="brandFilters"></div>
+      <p class="muted" id="count" style="margin: 8px 0 18px;"></p>
+      <div class="catalog-grid" id="catalog"></div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    (function () {
+      var api = window.nordline;
+      var data = window.NORDLINE_DATA;
+      var type = api.qs("type") || "all";
+      var brand = api.qs("brand") || "all";
+      var typeBox = document.getElementById("typeFilters");
+      var brandBox = document.getElementById("brandFilters");
+      var titles = { all: "Все снегоходы", mountain: "Горные", trail: "Трасса", touring: "Туризм", utility: "Утилитарные", crossover: "Кроссоверы", light: "Лёгкие" };
+
+      function chip(label, value, current, key) {
+        return '<button class="chip' + (current === value ? " active" : "") + '" data-key="' + key + '" data-value="' + value + '">' + label + "</button>";
+      }
+
+      typeBox.innerHTML = chip("Все типы", "all", type, "type") + data.types.map(function (item) {
+        return chip(item.name, item.id, type, "type");
+      }).join("");
+      brandBox.innerHTML = chip("Все бренды", "all", brand, "brand") + data.brands.map(function (item) {
+        return chip(item.name, item.id, brand, "brand");
+      }).join("");
+
+      function render() {
+        document.getElementById("catalogTitle").textContent = titles[type] || "Каталог";
+        var list = api.getModels().filter(function (model) {
+          return (type === "all" || model.type === type) && (brand === "all" || model.brandId === brand);
+        });
+        document.getElementById("count").textContent = "Найдено: " + list.length;
+        document.getElementById("catalog").innerHTML = list.map(api.cardHtml).join("") || "<p class='muted'>Нет моделей по фильтру.</p>";
+      }
+
+      document.addEventListener("click", function (event) {
+        var chipEl = event.target.closest(".chip");
+        if (!chipEl) return;
+        if (chipEl.getAttribute("data-key") === "type") type = chipEl.getAttribute("data-value");
+        if (chipEl.getAttribute("data-key") === "brand") brand = chipEl.getAttribute("data-value");
+        history.replaceState(null, "", "catalog.html?type=" + type + "&brand=" + brand);
+        typeBox.querySelectorAll(".chip").forEach(function (el) {
+          el.classList.toggle("active", el.getAttribute("data-value") === type);
+        });
+        brandBox.querySelectorAll(".chip").forEach(function (el) {
+          el.classList.toggle("active", el.getAttribute("data-value") === brand);
+        });
+        render();
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

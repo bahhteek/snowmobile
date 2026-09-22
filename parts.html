@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Запчасти — NORDLINE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="service">
+  <div class="grain"></div>
+  <div id="site-header"></div>
+  <section class="page-hero">
+    <div class="container">
+      <div class="crumbs"><a href="index.html">Главная</a><span>/</span><span>Запчасти</span></div>
+      <p class="eyebrow">Расходники и узлы</p>
+      <h1>Запчасти под модель</h1>
+      <p class="hero-lead">Поиск по модели и заявке. Корзины и онлайн-оплаты нет — менеджер подтвердит наличие и выставит счёт.</p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:8px;">
+    <div class="container">
+      <div class="catalog-grid" id="parts"></div>
+    </div>
+  </section>
+  <div id="site-footer"></div>
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    document.getElementById("parts").innerHTML = NORDLINE_DATA.parts.map(function (item) {
+      return '<article class="panel"><div class="brand">Совместимость</div><h3 style="font-size:32px;margin:8px 0;">' + item.name + '</h3><p class="muted">' + item.fit + '</p><div class="price" style="text-align:left;margin:12px 0;">' + item.price + '</div><button class="btn btn-primary js-lead" type="button" data-model="' + item.name + '">Запросить</button></article>';
+    }).join("");
+  </script>
+</body>
+</html>
