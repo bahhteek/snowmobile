@@ -15,9 +15,19 @@ $pages = nordline_pages();
 			<h2>Каталог</h2>
 			<ul>
 				<li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Главная</a></li>
-				<li><a href="<?php echo esc_url( nordline_page_url( 'katalog' ) ); ?>">Все снегоходы</a></li>
-				<?php foreach ( nordline_get_types() as $type ) : ?>
-					<li><a href="<?php echo esc_url( $type['url'] ); ?>"><?php echo esc_html( $type['name'] ); ?></a></li>
+				<li><a href="<?php echo esc_url( nordline_page_url( 'katalog' ) ); ?>">Вся техника</a></li>
+				<?php foreach ( nordline_get_categories() as $slug => $category ) : ?>
+					<li>
+						<a href="<?php echo esc_url( $category['url'] ); ?>"><?php echo esc_html( $category['name'] ); ?></a>
+						<?php $children = nordline_get_category_children( $slug ); ?>
+						<?php if ( $children ) : ?>
+							<ul>
+								<?php foreach ( $children as $child ) : ?>
+									<li><a href="<?php echo esc_url( $child['url'] ); ?>"><?php echo esc_html( $child['name'] ); ?></a></li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</li>
 				<?php endforeach; ?>
 				<li><a href="<?php echo esc_url( nordline_page_url( 'podbor' ) ); ?>">Подбор снегохода</a></li>
 				<li><a href="<?php echo esc_url( nordline_page_url( 'sravnenie' ) ); ?>">Сравнение моделей</a></li>

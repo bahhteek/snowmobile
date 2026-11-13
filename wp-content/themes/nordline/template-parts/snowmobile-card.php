@@ -25,7 +25,7 @@ if ( ! empty( $model['specs'] ) && is_array( $model['specs'] ) ) {
 	);
 }
 ?>
-<article class="card" data-type="<?php echo esc_attr( $model['type'] ); ?>" data-slug="<?php echo esc_attr( $model['slug'] ); ?>">
+<article class="card" data-type="<?php echo esc_attr( $model['type'] ); ?>" data-category="<?php echo esc_attr( $model['category'] ?? '' ); ?>" data-category-parent="<?php echo esc_attr( $model['category_parent'] ?? '' ); ?>" data-slug="<?php echo esc_attr( $model['slug'] ); ?>">
 	<a class="card-media" href="<?php echo esc_url( $model['url'] ); ?>">
 		<img src="<?php echo esc_url( $model['image'] ); ?>" alt="<?php echo esc_attr( $model['brand'] . ' ' . $model['name'] ); ?>">
 		<?php if ( $badges ) : ?>

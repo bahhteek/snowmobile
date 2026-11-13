@@ -69,7 +69,7 @@ if ( ! $model ) {
 			<table class="compare-table">
 				<tbody>
 					<?php if ( $model['brand'] ) : ?><tr><td>Бренд</td><td><?php echo esc_html( $model['brand'] ); ?></td></tr><?php endif; ?>
-					<?php if ( $model['type_label'] ) : ?><tr><td>Тип езды</td><td><?php echo esc_html( $model['type_label'] ); ?></td></tr><?php endif; ?>
+					<?php if ( $model['type_label'] ) : ?><tr><td>Подкатегория</td><td><?php echo esc_html( $model['type_label'] ); ?></td></tr><?php endif; ?>
 					<?php foreach ( $buy_specs as $spec ) : ?>
 						<tr><td><?php echo esc_html( $spec['label'] ); ?></td><td><?php echo esc_html( $spec['value'] ); ?></td></tr>
 					<?php endforeach; ?>

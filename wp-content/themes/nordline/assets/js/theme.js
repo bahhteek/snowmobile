@@ -66,29 +66,68 @@
     });
   });
 
-  var filters = document.getElementById("filters");
+  var categoryFilters = document.getElementById("categoryFilters");
   var catalog = document.getElementById("catalog");
+  var currentCategory = "all";
+  var currentSub = "all";
+
+  function subcategoryRows() {
+    return document.querySelectorAll(".subcategory-filters");
+  }
+
   function updateCatalogEmpty() {
     var empty = document.getElementById("catalogEmpty");
     if (!empty || !catalog) return;
-    var visible = catalog.querySelectorAll(".card:not(.hidden)").length;
-    empty.classList.toggle("is-visible", visible === 0);
+    empty.classList.toggle("is-visible", catalog.querySelectorAll(".card:not(.hidden)").length === 0);
   }
-  if (filters && catalog) {
-    filters.addEventListener("click", function (event) {
-      var chip = event.target.closest(".chip");
-      if (!chip || !chip.hasAttribute("data-filter")) return;
-      var type = chip.getAttribute("data-filter");
-      filters.querySelectorAll(".chip").forEach(function (item) {
-        item.classList.toggle("active", item === chip);
-      });
-      catalog.querySelectorAll(".card").forEach(function (card) {
-        var show = type === "all" || card.getAttribute("data-type") === type;
-        card.classList.toggle("hidden", !show);
-      });
-      updateCatalogEmpty();
+
+  function applyLineupFilter() {
+    if (!catalog) return;
+    catalog.querySelectorAll(".card").forEach(function (card) {
+      var cardCategory = card.getAttribute("data-category") || "";
+      var cardParent = card.getAttribute("data-category-parent") || "";
+      var categoryOk = currentCategory === "all" || cardCategory === currentCategory || cardParent === currentCategory;
+      var subOk = currentSub === "all" || cardCategory === currentSub;
+      card.classList.toggle("hidden", !(categoryOk && subOk));
+    });
+    subcategoryRows().forEach(function (row) {
+      row.hidden = row.getAttribute("data-parent") !== currentCategory;
     });
     updateCatalogEmpty();
+  }
+
+  if (categoryFilters) {
+    categoryFilters.addEventListener("click", function (event) {
+      var chip = event.target.closest(".chip");
+      if (!chip || !chip.hasAttribute("data-category")) return;
+      currentCategory = chip.getAttribute("data-category");
+      currentSub = "all";
+      categoryFilters.querySelectorAll(".chip").forEach(function (item) {
+        item.classList.toggle("active", item === chip);
+      });
+      subcategoryRows().forEach(function (row) {
+        row.querySelectorAll(".chip").forEach(function (item) {
+          item.classList.toggle("active", item.getAttribute("data-sub") === "all");
+        });
+      });
+      applyLineupFilter();
+    });
+  }
+
+  document.addEventListener("click", function (event) {
+    var row = event.target.closest(".subcategory-filters");
+    if (!row) return;
+    var chip = event.target.closest(".chip");
+    if (!chip || !chip.hasAttribute("data-sub")) return;
+    currentSub = chip.getAttribute("data-sub");
+    row.querySelectorAll(".chip").forEach(function (item) {
+      item.classList.toggle("active", item === chip);
+    });
+    applyLineupFilter();
+  });
+
+  if (catalog && categoryFilters) {
+    applyLineupFilter();
   }
 
   var quizData = [
@@ -164,7 +203,7 @@
   function quizDiffs(model, picked) {
     var diffs = [];
     if (!typeMatches(model, picked[0])) {
-      diffs.push("Тип езды: вы выбрали «" + picked[0] + "», у модели — " + (model.typeLabel || "не указан") + ".");
+      diffs.push("Подкатегория: вы выбрали «" + picked[0] + "», у модели — " + (model.typeLabel || "не указана") + ".");
     }
     if (!riderMatches(model, picked[1])) {
       diffs.push("Кто едет: «" + picked[1] + "»" + (model.use ? " не совпадает со сценарием «" + model.use + "»." : " не совпадает с характеристиками модели."));
@@ -224,10 +263,7 @@
       quizResult.classList.add("show");
       quizResult.innerHTML = result.html;
       var type = result.type || "";
-      if (filters && catalog && type) {
-        filters.querySelectorAll(".chip").forEach(function (chip) {
-          chip.classList.toggle("active", chip.getAttribute("data-filter") === type);
-        });
+      if (catalog && type) {
         catalog.querySelectorAll(".card").forEach(function (card) {
           card.classList.toggle("hidden", card.getAttribute("data-type") !== type);
         });
@@ -253,7 +289,7 @@
         return "<tr><td>" + label + "</td>" + models.map(function (model) { return "<td>" + (model[key] || "—") + "</td>"; }).join("") + "</tr>";
       }
       tableWrap.innerHTML = '<table class="compare-table"><thead><tr><th>Параметр</th>' + heads + "</tr></thead><tbody>" +
-        row("Тип езды", "type_label") + row("Цена", "price_label") + row("Наличие", "stock_label") +
+        row("Подкатегория", "type_label") + row("Цена", "price_label") + row("Наличие", "stock_label") +
         row("Двигатель", "engine") + row("Мощность", "hp") + row("Гусеница", "track") +
         row("Посадка", "seats") + row("Сценарий", "use") + "</tbody></table>";
     }

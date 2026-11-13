@@ -204,21 +204,25 @@ wp_add_inline_script(
 			</div>
 			<p><?=$section3['текст']?></p>
 		</div>
-		<div class="filters" id="filters">
-			<button class="chip active" data-filter="all" type="button">Все</button>
-			<?php
-			$demo_type_slugs = array();
-			if ( ! nordline_has_posts( 'snowmobile' ) ) {
-				foreach ( nordline_demo_types() as $demo_slug => $demo_type ) {
-					$demo_type_slugs[ $demo_type['name'] ] = $demo_slug;
-				}
-			}
-			foreach ( nordline_get_types() as $slug => $type ) :
-				$filter = isset( $demo_type_slugs[ $type['name'] ] ) ? $demo_type_slugs[ $type['name'] ] : $slug;
-				?>
-				<button class="chip" data-filter="<?php echo esc_attr( $filter ); ?>" type="button"><?php echo esc_html( $type['name'] ); ?></button>
+		<div class="filters" id="categoryFilters">
+			<button class="chip active" data-category="all" type="button">Вся техника</button>
+			<?php foreach ( nordline_get_categories() as $slug => $category ) : ?>
+				<button class="chip" data-category="<?php echo esc_attr( $slug ); ?>" type="button"><?php echo esc_html( $category['name'] ); ?></button>
 			<?php endforeach; ?>
 		</div>
+		<?php foreach ( nordline_get_categories() as $slug => $category ) :
+			$children = nordline_get_category_children( $slug );
+			if ( ! $children ) {
+				continue;
+			}
+			?>
+		<div class="filters subcategory-filters" data-parent="<?php echo esc_attr( $slug ); ?>" hidden>
+			<button class="chip active" data-sub="all" type="button">Все</button>
+			<?php foreach ( $children as $child_slug => $child ) : ?>
+				<button class="chip" data-sub="<?php echo esc_attr( $child_slug ); ?>" type="button"><?php echo esc_html( $child['name'] ); ?></button>
+			<?php endforeach; ?>
+		</div>
+		<?php endforeach; ?>
 		<div class="catalog-grid" id="catalog">
 			<?php foreach ( $models as $model ) { include get_template_directory() . '/template-parts/snowmobile-card.php'; } ?>
 			<p class="muted catalog-empty<?php echo $models ? '' : ' is-visible'; ?>" id="catalogEmpty">В этой категории нет товаров.</p>
@@ -329,7 +333,7 @@ wp_add_inline_script(
 				<tbody>
 					<?php
 					$rows = array(
-						'Тип езды' => 'type_label',
+						'Подкатегория' => 'type_label',
 						'Двигатель' => 'engine',
 						'Мощность' => 'hp',
 						'Гусеница' => 'track',

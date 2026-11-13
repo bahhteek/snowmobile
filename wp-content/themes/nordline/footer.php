@@ -14,9 +14,14 @@ $footer = nordline_field( 'подвал', array(
 			</div>
 			<div>
 				<h4>Каталог</h4>
-				<a href="<?php echo esc_url( nordline_page_url( 'katalog' ) ); ?>">Все снегоходы</a>
-				<a href="<?php echo esc_url( nordline_type_url( 'mountain' ) ); ?>">Горные</a>
-				<a href="<?php echo esc_url( nordline_type_url( 'utility' ) ); ?>">Утилитарные</a>
+				<a href="<?php echo esc_url( nordline_page_url( 'katalog' ) ); ?>">Вся техника</a>
+				<?php
+				$snowmobile_category = nordline_snowmobile_category();
+				$snowmobile_children = $snowmobile_category ? nordline_get_category_children( $snowmobile_category->slug ) : array();
+				foreach ( $snowmobile_children as $child ) :
+					?>
+					<a href="<?php echo esc_url( $child['url'] ); ?>"><?php echo esc_html( $child['name'] ); ?></a>
+				<?php endforeach; ?>
 				<a href="<?php echo esc_url( nordline_page_url( 'sravnenie' ) ); ?>">Сравнение</a>
 				<a href="<?php echo esc_url( nordline_page_url( 'podbor' ) ); ?>">Подбор</a>
 			</div>

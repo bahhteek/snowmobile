@@ -479,6 +479,10 @@ h3,
   margin-bottom: 22px;
 }
 
+.filters[hidden] {
+  display: none;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;

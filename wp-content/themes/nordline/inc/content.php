@@ -38,6 +38,19 @@ function nordline_first_term( $post_id, $taxonomy ) {
 	return $terms[0];
 }
 
+function nordline_equipment_term( $post_id ) {
+	$terms = get_the_terms( $post_id, 'equipment' );
+	if ( ! $terms || is_wp_error( $terms ) ) {
+		return null;
+	}
+	foreach ( $terms as $term ) {
+		if ( (int) $term->parent ) {
+			return $term;
+		}
+	}
+	return $terms[0];
+}
+
 function nordline_gallery_urls( $value, $fallback ) {
 	if ( ! is_array( $value ) || ! $value ) {
 		return $fallback;
@@ -103,8 +116,15 @@ function nordline_image_url( $image, $fallback = '' ) {
 
 function nordline_model_from_post( $post ) {
 	$id    = $post->ID;
-	$brand = nordline_first_term( $id, 'brand' );
-	$type  = nordline_first_term( $id, 'ride_type' );
+	$brand           = nordline_first_term( $id, 'brand' );
+	$category        = nordline_equipment_term( $id );
+	$category_parent = '';
+	if ( $category && $category->parent ) {
+		$parent_term = get_term( (int) $category->parent, 'equipment' );
+		if ( $parent_term && ! is_wp_error( $parent_term ) ) {
+			$category_parent = $parent_term->slug;
+		}
+	}
 	$image = nordline_image_url( nordline_raw_field( 'картинка', $id ) );
 	if ( ! $image ) {
 		$image = get_the_post_thumbnail_url( $id, 'large' );
@@ -183,8 +203,11 @@ function nordline_model_from_post( $post ) {
 		'brand'       => $brand ? $brand->name : '',
 		'brand_slug'  => $brand ? $brand->slug : '',
 		'year'        => nordline_field( 'год', '', $id ),
-		'type'        => $type ? $type->slug : '',
-		'type_label'  => $type ? $type->name : '',
+		'type'           => ( $category && $category_parent ) ? $category->slug : '',
+		'type_label'     => ( $category && $category_parent ) ? $category->name : '',
+		'category'        => $category ? $category->slug : '',
+		'category_label'  => $category ? $category->name : '',
+		'category_parent' => $category_parent,
 		'price'       => 0,
 		'price_label' => nordline_format_price( nordline_field( 'цена', '', $id ) ),
 		'stock'       => in_array( 'in_stock', $marks, true ) ? 'in' : 'soon',
@@ -208,8 +231,9 @@ function nordline_model_from_post( $post ) {
 }
 
 function nordline_get_models( $args = array() ) {
-	$type  = isset( $args['type'] ) ? $args['type'] : '';
-	$brand = isset( $args['brand'] ) ? $args['brand'] : '';
+	$type     = isset( $args['type'] ) ? $args['type'] : '';
+	$brand    = isset( $args['brand'] ) ? $args['brand'] : '';
+	$category = isset( $args['category'] ) ? $args['category'] : '';
 	$models = array();
 
 	if ( nordline_has_posts( 'snowmobile' ) ) {
@@ -223,7 +247,7 @@ function nordline_get_models( $args = array() ) {
 		$tax = array();
 		if ( $type ) {
 			$tax[] = array(
-				'taxonomy' => 'ride_type',
+				'taxonomy' => 'equipment',
 				'field'    => 'slug',
 				'terms'    => $type,
 			);
@@ -233,6 +257,13 @@ function nordline_get_models( $args = array() ) {
 				'taxonomy' => 'brand',
 				'field'    => 'slug',
 				'terms'    => $brand,
+			);
+		}
+		if ( $category ) {
+			$tax[] = array(
+				'taxonomy' => 'equipment',
+				'field'    => 'slug',
+				'terms'    => $category,
 			);
 		}
 		if ( $tax ) {
@@ -331,42 +362,137 @@ function nordline_get_brands() {
 	return $list;
 }
 
-function nordline_get_types() {
-	$terms = nordline_terms_list( 'ride_type' );
-	if ( $terms ) {
-		$list = array();
-		foreach ( $terms as $term ) {
-			$link = get_term_link( $term );
-			$list[ $term->slug ] = array(
-				'name'  => $term->name,
-				'label' => nordline_field( 'тег', '', nordline_term_key( $term ) ),
-				'text'  => $term->description ? $term->description : '',
-				'image' => nordline_term_image_url( $term, nordline_img( 'hero.jpg' ) ),
-				'url'   => is_wp_error( $link ) ? add_query_arg( 'type', $term->slug, nordline_page_url( 'katalog' ) ) : $link,
-			);
-		}
-		return $list;
+function nordline_equipment_terms( $parent = 0 ) {
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'equipment',
+			'hide_empty' => false,
+			'parent'     => $parent,
+			'orderby'    => 'term_id',
+			'order'      => 'ASC',
+		)
+	);
+	if ( is_wp_error( $terms ) || ! $terms ) {
+		return array();
 	}
 	$list = array();
-	foreach ( nordline_demo_types() as $slug => $type ) {
-		$type['image'] = nordline_img( $type['image'] );
-		$type['url']   = nordline_type_url( $slug );
-		$list[ $slug ] = $type;
+	foreach ( $terms as $term ) {
+		$link = get_term_link( $term );
+		$list[ $term->slug ] = array(
+			'name' => $term->name,
+			'text' => $term->description ? $term->description : '',
+			'url'  => is_wp_error( $link ) ? add_query_arg( 'category', $term->slug, nordline_page_url( 'katalog' ) ) : $link,
+		);
+	}
+	return $list;
+}
+
+function nordline_get_categories() {
+	return nordline_equipment_terms( 0 );
+}
+
+function nordline_get_category_children( $parent_slug ) {
+	$parent = get_term_by( 'slug', $parent_slug, 'equipment' );
+	if ( ! $parent || is_wp_error( $parent ) ) {
+		return array();
+	}
+	return nordline_equipment_terms( (int) $parent->term_id );
+}
+
+function nordline_snowmobile_category() {
+	$by_slug = get_term_by( 'slug', 'snegohody', 'equipment' );
+	if ( $by_slug && ! is_wp_error( $by_slug ) ) {
+		return $by_slug;
+	}
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'equipment',
+			'hide_empty' => false,
+			'parent'     => 0,
+		)
+	);
+	if ( is_wp_error( $terms ) || ! $terms ) {
+		return null;
+	}
+	foreach ( $terms as $term ) {
+		if ( false !== mb_stripos( $term->name, 'снегоход' ) ) {
+			return $term;
+		}
+	}
+	return null;
+}
+
+function nordline_legacy_ride_type( $name ) {
+	global $wpdb;
+	return $wpdb->get_row(
+		$wpdb->prepare(
+			"SELECT t.term_id, tt.description
+			FROM {$wpdb->terms} t
+			INNER JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id
+			WHERE tt.taxonomy = 'ride_type' AND t.name = %s
+			LIMIT 1",
+			$name
+		)
+	);
+}
+
+function nordline_get_types() {
+	$parent = nordline_snowmobile_category();
+	if ( ! $parent ) {
+		return array();
+	}
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'equipment',
+			'hide_empty' => false,
+			'parent'     => (int) $parent->term_id,
+			'orderby'    => 'term_id',
+			'order'      => 'ASC',
+		)
+	);
+	if ( is_wp_error( $terms ) || ! $terms ) {
+		return array();
+	}
+	$list = array();
+	foreach ( $terms as $term ) {
+		$link  = get_term_link( $term );
+		$label = nordline_field( 'тег', '', nordline_term_key( $term ) );
+		$text  = $term->description ? $term->description : '';
+		$image = nordline_term_image_url( $term, '' );
+		if ( ! $label || ! $text || ! $image ) {
+			$legacy = nordline_legacy_ride_type( $term->name );
+			if ( $legacy ) {
+				if ( ! $label ) {
+					$label = (string) get_term_meta( (int) $legacy->term_id, 'тег', true );
+				}
+				if ( ! $text ) {
+					$text = (string) $legacy->description;
+				}
+				if ( ! $image ) {
+					$image = nordline_image_url( get_term_meta( (int) $legacy->term_id, 'картинка', true ) );
+				}
+			}
+		}
+		$list[ $term->slug ] = array(
+			'name'  => $term->name,
+			'label' => $label,
+			'text'  => $text,
+			'image' => $image ? $image : nordline_img( 'hero.jpg' ),
+			'url'   => is_wp_error( $link ) ? add_query_arg( 'category', $term->slug, nordline_page_url( 'katalog' ) ) : $link,
+		);
 	}
 	return $list;
 }
 
 function nordline_type_url( $slug ) {
-	if ( nordline_has_posts( 'snowmobile' ) ) {
-		$term = get_term_by( 'slug', $slug, 'ride_type' );
-		if ( $term && ! is_wp_error( $term ) ) {
-			$link = get_term_link( $term );
-			if ( ! is_wp_error( $link ) ) {
-				return $link;
-			}
+	$term = get_term_by( 'slug', $slug, 'equipment' );
+	if ( $term && ! is_wp_error( $term ) ) {
+		$link = get_term_link( $term );
+		if ( ! is_wp_error( $link ) ) {
+			return $link;
 		}
 	}
-	return add_query_arg( 'type', $slug, nordline_page_url( 'katalog' ) );
+	return add_query_arg( 'category', $slug, nordline_page_url( 'katalog' ) );
 }
 
 function nordline_brand_url( $slug ) {

@@ -5,10 +5,11 @@ function nordline_register_content_types() {
 		'snowmobile',
 		array(
 			'labels' => array(
-				'name'          => 'Снегоходы',
-				'singular_name' => 'Снегоход',
-				'add_new_item'  => 'Добавить снегоход',
-				'edit_item'     => 'Редактировать снегоход',
+				'name'          => 'Техника',
+				'singular_name' => 'Техника',
+				'add_new_item'  => 'Добавить технику',
+				'edit_item'     => 'Редактировать технику',
+				'menu_name'     => 'Техника',
 			),
 			'public'       => true,
 			'has_archive'  => false,
@@ -35,17 +36,18 @@ function nordline_register_content_types() {
 	);
 
 	register_taxonomy(
-		'ride_type',
+		'equipment',
 		'snowmobile',
 		array(
 			'labels'       => array(
-				'name'          => 'Тип езды',
-				'singular_name' => 'Тип езды',
+				'name'          => 'Категории',
+				'singular_name' => 'Категория',
+				'menu_name'     => 'Категории',
 			),
 			'public'       => true,
 			'hierarchical' => true,
 			'show_in_rest' => true,
-			'rewrite'      => array( 'slug' => 'tip' ),
+			'rewrite'      => array( 'slug' => 'kategoriya' ),
 		)
 	);
 
