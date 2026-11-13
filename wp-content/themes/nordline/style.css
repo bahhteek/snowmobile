@@ -1,0 +1,12 @@
+/*
+Theme Name: NORDLINE
+Theme URI: https://nordline.local
+Author: NORDLINE
+Description: Дилерский сайт снегоходов. Шаблоны, типы записей и меню динамические. Тексты и карточки статические, пока в SCF не заполнены поля.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+Text Domain: nordline
+*/
+
+/* Основные стили подключаются из assets/css/styles.css */
